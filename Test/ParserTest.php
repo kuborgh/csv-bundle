@@ -61,7 +61,9 @@ EOT;
      */
     protected function assertNumRows($num, $array)
     {
-        $this->assertEquals($num, count($array), 'Number of rows differs. ');
+        $cnt = count($array);
+        $errMsg = sprintf('Number of rows differs. Found %d but expected %d', $cnt, $num);
+        $this->assertEquals($num, $cnt, $errMsg);
     }
 
     /**
@@ -72,7 +74,9 @@ EOT;
     {
         $rowNum = 0;
         foreach ($array as $row) {
-            $this->assertEquals($num, count($row), 'Number of columns differs in row '.$rowNum);
+            $cnt = count($row);
+            $errMsg = sprintf('Number of columns differs in row %d. Found %d but expected %d', $rowNum, $cnt, $num);
+            $this->assertEquals($num, $cnt, $errMsg);
             $rowNum++;
         }
     }

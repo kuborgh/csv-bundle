@@ -58,7 +58,7 @@ class KuborghCsvExtension extends Extension
 
             $parserClass = $container->getParameter('kuborgh_csv.parser.class');
             $serviceDef = new Definition($parserClass, [$parserConfigDef]);
-            $serviceName = 'kuborgh_csv.importer.'.$parserName;
+            $serviceName = 'kuborgh_csv.parser.'.$parserName;
             $container->setDefinition($serviceName, $serviceDef);
         }
     }

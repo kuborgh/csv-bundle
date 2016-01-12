@@ -25,7 +25,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $this->extension->load($config, $this->container);
 
         /** @var \Kuborgh\CsvBundle\Parser\Parser $testParser */
-        $testParser = $this->container->get('kuborgh_csv.importer.test');
+        $testParser = $this->container->get('kuborgh_csv.parser.test');
 
         $class = new ReflectionClass(get_class($testParser));
         $reflCconfig = $class->getProperty('configuration');
@@ -52,7 +52,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $this->extension->load($config, $this->container);
 
         /** @var \Kuborgh\CsvBundle\Parser\Parser $testParser */
-        $testParser = $this->container->get('kuborgh_csv.importer.test');
+        $testParser = $this->container->get('kuborgh_csv.parser.test');
 
         $class = new ReflectionClass(get_class($testParser));
         $reflCconfig = $class->getProperty('configuration');

@@ -58,6 +58,13 @@ kuborgh_csv:
             line_ending: "\r\n"
 ```
 
+Usage
+-----
+```php
+$parser = $container->get('kuborgh_csv.parser.<my_parser>');
+$array = $parser->parse($csv);
+```
+
 Testing
 -------
 The whole parser should be unittested. You can run the tests with
