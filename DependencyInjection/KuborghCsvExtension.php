@@ -29,6 +29,10 @@ class KuborghCsvExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        // Load parameters
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('parameters.yml');
+
         $this->loadParserConfig($config['parser'], $container);
     }
 
@@ -41,11 +45,19 @@ class KuborghCsvExtension extends Extension
     protected function loadParserConfig(array $config, ContainerBuilder $container)
     {
         foreach ($config as $parserName => $parserConfig) {
-            $parserConfigDef = new Definition('Kuborgh\CsvBundle\Configuration\ParserConfiguration');
+            $parserConfigClass = $container->getParameter('kuborgh_csv.configuration.parser.class');
+            $parserConfigDef = new Definition($parserConfigClass);
+
+            // Apply config
             if ($parserConfig['delimiter']) {
                 $parserConfigDef->addMethodCall('setDelimiter', [$parserConfig['delimiter']]);
             }
-            $serviceDef = new Definition('Kuborgh\CsvBundle\Parser\Parser', [$parserConfigDef]);
+            if ($parserConfig['line_ending']) {
+                $parserConfigDef->addMethodCall('setLineEnding', [$parserConfig['line_ending']]);
+            }
+
+            $parserClass = $container->getParameter('kuborgh_csv.parser.class');
+            $serviceDef = new Definition($parserClass, [$parserConfigDef]);
             $serviceName = 'kuborgh_csv.importer.'.$parserName;
             $container->setDefinition($serviceName, $serviceDef);
         }

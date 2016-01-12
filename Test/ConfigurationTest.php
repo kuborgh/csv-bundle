@@ -30,9 +30,11 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $class = new ReflectionClass(get_class($testParser));
         $reflCconfig = $class->getProperty('configuration');
         $reflCconfig->setAccessible(true);
+        /** @var \Kuborgh\CsvBundle\Configuration\ParserConfiguration $config */
         $config = $reflCconfig->getValue($testParser);
 
         $this->assertEquals(',', $config->getDelimiter());
+        $this->assertEquals("\r\n", $config->getLineEnding());
     }
 
     public function testParserConfiguration()
@@ -42,6 +44,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
                 'parser' => array(
                     'test' => array(
                         'delimiter' => '7',
+                        'line_ending' => "\n",
                     ),
                 ),
             ),
@@ -57,6 +60,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $config = $reflCconfig->getValue($testParser);
 
         $this->assertEquals('7', $config->getDelimiter());
+        $this->assertEquals("\n", $config->getLineEnding());
     }
 
     protected function setUp()

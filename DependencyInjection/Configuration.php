@@ -31,6 +31,7 @@ class Configuration implements ConfigurationInterface
                         ->prototype('array')
                             ->children()
                                 ->scalarNode('delimiter')->defaultValue(',')->end()
+                                ->scalarNode('line_ending')->defaultValue("\r\n")->end()
                             ->end()
                         ->end()
                     ->end()

@@ -1,0 +1,3 @@
+parameters:
+    kuborgh_csv.parser.class: Kuborgh\CsvBundle\Parser\Parser
+    kuborgh_csv.configuration.parser.class: Kuborgh\CsvBundle\Configuration\ParserConfiguration
