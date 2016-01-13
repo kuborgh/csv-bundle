@@ -18,29 +18,36 @@ class CharacterParser extends AbstractParser implements ParserInterface
     protected $nextChar = 0;
 
     /**
+     * Input string
+     *
      * @var string
      */
     protected $csvString = '';
 
     /**
+     * Length of the input string
+     *
      * @var int
      */
     protected $csvLength = 0;
 
     /**
      * Finished rows
+     *
      * @var array
      */
     protected $rows = array();
 
     /**
      * Current row
+     *
      * @var array
      */
     protected $row = array();
 
     /**
      * Current field
+     *
      * @var string
      */
     protected $field = '';
@@ -71,7 +78,7 @@ class CharacterParser extends AbstractParser implements ParserInterface
                     break;
                 // Delimiter
                 case $delim:
-                    $this->finishField(true);
+                    $this->finishField();
                     break;
                 // Line break
                 case $lineBreak1:
@@ -95,7 +102,7 @@ class CharacterParser extends AbstractParser implements ParserInterface
         } while ($this->nextChar < $this->csvLength);
 
         // Finish all fields and rows
-        $this->finishField();
+        $this->finishField(false);
         if (count($this->row)) {
             $this->finishRow();
         }
@@ -119,7 +126,7 @@ class CharacterParser extends AbstractParser implements ParserInterface
      * Read the current character and forward the pointer
      *
      * @return string one character
-     * @throws \Exception
+     * @throws EofException
      */
     protected function read()
     {
@@ -166,8 +173,6 @@ class CharacterParser extends AbstractParser implements ParserInterface
 
     /**
      * Read quoted string until quote end is reached.
-     *
-     * @rfe this has potential to leap forward to the next "
      */
     protected function readQuotedString()
     {
@@ -194,7 +199,7 @@ class CharacterParser extends AbstractParser implements ParserInterface
      *
      * @param bool $force When force is true, even empty fields are added
      */
-    protected function finishField($force = false)
+    protected function finishField($force = true)
     {
         if ($force || !empty($this->field)) {
             $this->row[] = $this->field;
