@@ -56,6 +56,11 @@ kuborgh_csv:
             
             # Line Ending (default: "\r\n")
             line_ending: "\r\n"
+            
+            # Implementation for the parser. Possible values are "character" (default) oder "simple" (not recommended).
+            # You can add your own parser implementation by registering the class name in parameters like  
+            # kuborgh_csv.parser.<my_implementation>.class 
+            implementation: character
 ```
 
 Usage

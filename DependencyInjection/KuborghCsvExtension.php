@@ -55,8 +55,9 @@ class KuborghCsvExtension extends Extension
             if ($parserConfig['line_ending']) {
                 $parserConfigDef->addMethodCall('setLineEnding', [$parserConfig['line_ending']]);
             }
+            $implementation = $parserConfig['implementation'];
 
-            $parserClass = $container->getParameter('kuborgh_csv.parser.class');
+            $parserClass = $container->getParameter('kuborgh_csv.parser.'.$implementation.'.class');
             $serviceDef = new Definition($parserClass, [$parserConfigDef]);
             $serviceName = 'kuborgh_csv.parser.'.$parserName;
             $container->setDefinition($serviceName, $serviceDef);

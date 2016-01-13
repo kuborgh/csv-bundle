@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
                             ->children()
                                 ->scalarNode('delimiter')->defaultValue(',')->end()
                                 ->scalarNode('line_ending')->defaultValue("\r\n")->end()
+                                ->scalarNode('implementation')->defaultValue('character')->end()
                             ->end()
                         ->end()
                     ->end()

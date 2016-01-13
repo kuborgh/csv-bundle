@@ -43,8 +43,9 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
             'kuborgh_csv' => array(
                 'parser' => array(
                     'test' => array(
-                        'delimiter' => '7',
-                        'line_ending' => "\n",
+                        'implementation' => 'character',
+                        'delimiter'      => '7',
+                        'line_ending'    => "\n",
                     ),
                 ),
             ),

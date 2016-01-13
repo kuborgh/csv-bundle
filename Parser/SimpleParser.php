@@ -5,25 +5,10 @@ namespace Kuborgh\CsvBundle\Parser;
 use Kuborgh\CsvBundle\Configuration\ParserConfiguration;
 
 /**
- * CSV Parser
+ * Very very simple CSV Parser without escaping support
  */
-class Parser
+class SimpleParser extends AbstractParser implements ParserInterface
 {
-    /**
-     * @var ParserConfiguration
-     */
-    protected $configuration;
-
-    /**
-     * Parser constructor.
-     *
-     * @param ParserConfiguration $configuration
-     */
-    public function __construct(ParserConfiguration $configuration)
-    {
-        $this->configuration = $configuration;
-    }
-
     /**
      * Parse the given string into an php array
      *
@@ -36,7 +21,6 @@ class Parser
         $lineEnding = $this->configuration->getLineEnding();
         $delimiter = $this->configuration->getDelimiter();
 
-        // @todo very simple implementation. Improve and/or implement strategy pattern
         $lines = explode($lineEnding, $csvString);
         $rows = array();
         foreach ($lines as $line) {

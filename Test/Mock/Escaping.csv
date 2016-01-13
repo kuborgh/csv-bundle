@@ -1,0 +1,3 @@
+"For linebreaks only \n (LF) is used";It has 5 rows per line;"Delimiter is ;";File ends with an empty row;"Row 5"
+"Second line";"""";Previously was only a double quote;"This file also contains
+line breaks and ""inline quotes"" inside fields";7
