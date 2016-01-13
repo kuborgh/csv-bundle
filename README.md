@@ -1,7 +1,11 @@
 CSV Bundle
 ==========
+[![Build Status][travis-image]][travis-url]
+[travis-url]: https://travis-ci.org/kuborgh/csv-bundle
+[travis-image]: https://secure.travis-ci.org/kuborgh/csv-bundle.svg?branch=master
+
 This bundle is intended to be simple, but rfc4180 conform csv parser and writer. It will be extended in the future to 
-fit more and more needs of custom implementations.  
+fit more and more needs of custom implementations.
 
 Installation
 ------------
