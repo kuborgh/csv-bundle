@@ -18,10 +18,13 @@
     </testsuites>
 
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true" />
-        <blacklist>
-            <directory>./vendor</directory>
-        </blacklist>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory>.</directory>
+            <exclude>
+                <directory>./Test</directory>
+                <directory>./vendor</directory>
+            </exclude>
+        </whitelist>
     </filter>
 
     <logging>

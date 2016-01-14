@@ -2,8 +2,6 @@
 
 namespace Kuborgh\CsvBundle\Parser;
 
-use Kuborgh\CsvBundle\Configuration\ParserConfiguration;
-
 /**
  * Very very simple CSV Parser without escaping support
  */

@@ -2,8 +2,6 @@
 
 use Kuborgh\CsvBundle\Configuration\ParserConfiguration;
 use Kuborgh\CsvBundle\Parser\ParserInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Kuborgh\CsvBundle\Parser\Parser;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
