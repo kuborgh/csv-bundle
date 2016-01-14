@@ -68,13 +68,13 @@ EOT;
         $this->assertEquals('It has 5 rows per line', $array[0][1]);
         $this->assertEquals('Delimiter is ;', $array[0][2]);
         $this->assertEquals('File ends with an empty row', $array[0][3]);
-        $this->assertEquals('Row 5', $array[0][4]);
+        $this->assertEquals('Quote "must" be at start or is ignored', $array[0][4]);
 
         $this->assertEquals('Second line', $array[1][0]);
         $this->assertEquals('"', $array[1][1]);
         $this->assertEquals('Previously was only a double quote', $array[1][2]);
         $this->assertEquals("This file also contains\nline breaks and \"inline quotes\" inside fields", $array[1][3]);
-        $this->assertEquals(7, $array[1][4]);
+        $this->assertEquals('When not starting with a quote, it may end with one "', $array[1][4]);
     }
 
     public function testQuotes()
@@ -99,6 +99,33 @@ EOT;
         $this->assertEquals("\n", $array[1][0]);
         $this->assertEquals('', $array[1][1]);
         $this->assertEquals('""', $array[1][2]);
+    }
+
+    public function testInvalidLineBreak()
+    {
+        $config = array(
+            'delimiter'   => ';',
+            'line_ending' => "\r\n",
+        );
+        $this->setConfiguration($config);
+        $csv = "a;b\rc;d;e\n\r\n";
+        $array = $this->parser->parse($csv);
+
+        $this->assertNumRows(1, $array);
+        $this->assertNumCols(4, $array);
+        $this->assertEquals('a', $array[0][0]);
+        $this->assertEquals("b\rc", $array[0][1]);
+        $this->assertEquals('d', $array[0][2]);
+        $this->assertEquals("e\n", $array[0][3]);
+    }
+
+    /**
+     * @expectedException \Kuborgh\CsvBundle\Exception\EofException
+     */
+    public function testEofInQuote()
+    {
+        $csv = '"a","b""';
+        $this->parser->parse($csv);
     }
 
     /**

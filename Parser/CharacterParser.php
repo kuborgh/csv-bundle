@@ -74,7 +74,11 @@ class CharacterParser extends AbstractParser implements ParserInterface
             switch ($char) {
                 // Start quoted string -> leap to the end
                 case '"':
-                    $this->readQuotedString();
+                    if (empty($this->field)) {
+                        $this->readQuotedString();
+                    } else {
+                        $this->field .= $char;
+                    }
                     break;
                 // Delimiter
                 case $delim:
@@ -186,10 +190,10 @@ class CharacterParser extends AbstractParser implements ParserInterface
                     $this->field .= $this->read();
                 } else {
                     // Quote ended
-                    return;
+                    break;
                 }
             } catch (EofException $exc) {
-                return;
+                break;
             }
         } while (true);
     }

@@ -2,6 +2,8 @@
 
 namespace Kuborgh\CsvBundle\Configuration;
 
+use Kuborgh\CsvBundle\Exception\InvalidConfigurationException;
+
 /**
  * Configuration for parser and generator
  */
@@ -39,12 +41,12 @@ abstract class AbstractConfiguration
      *
      * @param string $delimiter
      *
-     * @throws \Exception
+     * @throws InvalidConfigurationException
      */
     public function setDelimiter($delimiter)
     {
         if (strlen($delimiter) != 1) {
-            throw new \Exception('CSV Configuration error: Delimiter must be exactly 1 character');
+            throw new InvalidConfigurationException('CSV Configuration error: Delimiter must be exactly 1 character');
         }
         $this->delimiter = $delimiter;
     }
@@ -64,12 +66,12 @@ abstract class AbstractConfiguration
      *
      * @param mixed $lineEnding
      *
-     * @throws \Exception
+     * @throws InvalidConfigurationException
      */
     public function setLineEnding($lineEnding)
     {
         if (!in_array($lineEnding, array(self::LINE_ENDING_CR, self::LINE_ENDING_CRLF, self::LINE_ENDING_LF))) {
-            throw new \Exception('Invalid line ending provided. Only CR,LF and CRLF allowed');
+            throw new InvalidConfigurationException('Invalid line ending provided. Only CR,LF and CRLF allowed');
         }
         $this->lineEnding = $lineEnding;
     }

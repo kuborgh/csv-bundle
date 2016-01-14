@@ -29,8 +29,8 @@
       "Kuborgh\\CsvBundle": ""
     }
   },
-  "config" : {
-    "bin-dir" : "bin"
+  "config": {
+    "bin-dir": "bin"
   },
   "target-dir": "Kuborgh/CsvBundle"
 }
