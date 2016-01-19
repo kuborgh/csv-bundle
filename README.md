@@ -65,7 +65,9 @@ kuborgh_csv:
             # You can add your own parser implementation by registering the class name in parameters like  
             # kuborgh_csv.parser.<my_implementation>.class 
             implementation: character
+    
     generator:
+        # Add here as many generators as you need. Each will get it's own service kuborgh_csv.generator.my_generator
         my_generator:
             # Delimiter (default: ",")
             delimiter: ","
