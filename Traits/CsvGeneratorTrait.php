@@ -42,7 +42,7 @@ trait CsvGeneratorTrait
     /**
      * Convenience wrapper
      *
-     * @param array $array
+     * @param array[] $array
      *
      * @return string
      */
