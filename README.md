@@ -65,13 +65,32 @@ kuborgh_csv:
             # You can add your own parser implementation by registering the class name in parameters like  
             # kuborgh_csv.parser.<my_implementation>.class 
             implementation: character
+    generator:
+        my_generator:
+            # Delimiter (default: ",")
+            delimiter: ","
+            
+            # Line Ending (default: "\r\n")
+            line_ending: "\r\n"
+            
+            # Implementation for the generator. Possible values are "string" (default) oder "php" (not recommended).
+            # You can add your own generatr implementation by registering the class name in parameters like  
+            # kuborgh_csv.generator.<my_implementation>.class 
+            implementation: string
 ```
 
 Usage
 -----
+To parse CSV you simply call
 ```php
 $parser = $container->get('kuborgh_csv.parser.<my_parser>');
 $array = $parser->parse($csv);
+```
+
+To generate CSV you simply call
+```php
+$generator = $container->get('kuborgh_csv.generator.<my_generator>');
+$csv = $generator->generate($array);
 ```
 
 Testing
@@ -81,3 +100,4 @@ The whole parser should be unittested. You can run the tests with
 $ composer install
 $ bin/phpunit
 ```
+The coverage report is saved in the coverage folder and should always cover 100%

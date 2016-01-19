@@ -1,4 +1,12 @@
 parameters:
+    # Parsers
     kuborgh_csv.parser.simple.class: Kuborgh\CsvBundle\Parser\SimpleParser
     kuborgh_csv.parser.character.class: Kuborgh\CsvBundle\Parser\CharacterParser
+
+    # Generators
+    kuborgh_csv.generator.string.class: Kuborgh\CsvBundle\Generator\StringGenerator
+    kuborgh_csv.generator.php.class: Kuborgh\CsvBundle\Generator\PhpGenerator
+
+    # Configuration
     kuborgh_csv.configuration.parser.class: Kuborgh\CsvBundle\Configuration\ParserConfiguration
+    kuborgh_csv.configuration.generator.class: Kuborgh\CsvBundle\Configuration\GeneratorConfiguration

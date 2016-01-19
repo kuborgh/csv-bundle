@@ -34,6 +34,7 @@ class KuborghCsvExtension extends Extension
         $loader->load('parameters.yml');
 
         $this->loadParserConfig($config['parser'], $container);
+        $this->loadGeneratorConfig($config['generator'], $container);
     }
 
     /**
@@ -46,21 +47,63 @@ class KuborghCsvExtension extends Extension
     {
         foreach ($config as $parserName => $parserConfig) {
             $parserConfigClass = $container->getParameter('kuborgh_csv.configuration.parser.class');
-            $parserConfigDef = new Definition($parserConfigClass);
+            $parserConfigDef = $this->loadCommonConfig($parserConfig, $parserConfigClass);
 
-            // Apply config
-            if ($parserConfig['delimiter']) {
-                $parserConfigDef->addMethodCall('setDelimiter', [$parserConfig['delimiter']]);
-            }
-            if ($parserConfig['line_ending']) {
-                $parserConfigDef->addMethodCall('setLineEnding', [$parserConfig['line_ending']]);
-            }
+            // Set implementation
             $implementation = $parserConfig['implementation'];
-
             $parserClass = $container->getParameter('kuborgh_csv.parser.'.$implementation.'.class');
             $serviceDef = new Definition($parserClass, [$parserConfigDef]);
+
+            // Build Service
             $serviceName = 'kuborgh_csv.parser.'.$parserName;
             $container->setDefinition($serviceName, $serviceDef);
         }
+    }
+
+    /**
+     * Load configurations for csv generators
+     *
+     * @param array            $config    Config
+     * @param ContainerBuilder $container Container
+     */
+    protected function loadGeneratorConfig(array $config, ContainerBuilder $container)
+    {
+        foreach ($config as $parserName => $parserConfig) {
+            // Prepare config object with common settings
+            $parserConfigClass = $container->getParameter('kuborgh_csv.configuration.generator.class');
+            $parserConfigDef = $this->loadCommonConfig($parserConfig, $parserConfigClass);
+
+            // Set implementation
+            $implementation = $parserConfig['implementation'];
+            $parserClass = $container->getParameter('kuborgh_csv.generator.'.$implementation.'.class');
+            $serviceDef = new Definition($parserClass, [$parserConfigDef]);
+
+            // Build Service
+            $serviceName = 'kuborgh_csv.generator.'.$parserName;
+            $container->setDefinition($serviceName, $serviceDef);
+        }
+    }
+
+    /**
+     * Apply common config options
+     *
+     * @param array  $parserConfig      Parser config from yml
+     * @param string $parserConfigClass Config class
+     *
+     * @return Definition
+     */
+    protected function loadCommonConfig($parserConfig, $parserConfigClass)
+    {
+        $parserConfigDef = new Definition($parserConfigClass);
+
+        // Apply config
+        if ($parserConfig['delimiter']) {
+            $parserConfigDef->addMethodCall('setDelimiter', [$parserConfig['delimiter']]);
+        }
+        if ($parserConfig['line_ending']) {
+            $parserConfigDef->addMethodCall('setLineEnding', [$parserConfig['line_ending']]);
+        }
+
+        return $parserConfigDef;
     }
 }
