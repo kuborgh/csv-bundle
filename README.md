@@ -36,7 +36,7 @@ class AppKernel extends Kernel
         $bundles = array(
             // ...
 
-            new Kuborgh\CsvBundle\CsvBundle(),
+            new Kuborgh\CsvBundle\KuborghCsvBundle(),
         );
 
         // ...
