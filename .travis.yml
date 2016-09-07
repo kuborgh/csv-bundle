@@ -13,6 +13,6 @@ env:
   - SYMFONY_VERSION=dev-master
 before_install:
   - composer require "symfony/framework-bundle:${SYMFONY_VERSION}" --no-update
-  - composer require-dev "symfony/property-access:${SYMFONY_VERSION}" --no-update
+  - composer require "symfony/property-access:${SYMFONY_VERSION}" --dev --no-update
 install: composer install
 script: bin/phpunit
