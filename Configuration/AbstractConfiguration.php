@@ -9,9 +9,9 @@ use Kuborgh\CsvBundle\Exception\InvalidConfigurationException;
  */
 abstract class AbstractConfiguration
 {
-    const LINE_ENDING_CRLF = "\r\n";
-    const LINE_ENDING_LF = "\n";
-    const LINE_ENDING_CR = "\r";
+    public const LINE_ENDING_CRLF = "\r\n";
+    public const LINE_ENDING_LF = "\n";
+    public const LINE_ENDING_CR = "\r";
 
     /**
      * Delimiting character
@@ -31,7 +31,7 @@ abstract class AbstractConfiguration
      *
      * @return string
      */
-    public function getDelimiter()
+    public function getDelimiter(): string
     {
         return $this->delimiter;
     }
@@ -43,11 +43,12 @@ abstract class AbstractConfiguration
      *
      * @throws InvalidConfigurationException
      */
-    public function setDelimiter($delimiter)
+    public function setDelimiter($delimiter): void
     {
-        if (strlen($delimiter) != 1) {
+        if (strlen($delimiter) !== 1) {
             throw new InvalidConfigurationException('CSV Configuration error: Delimiter must be exactly 1 character');
         }
+
         $this->delimiter = $delimiter;
     }
 
@@ -68,11 +69,12 @@ abstract class AbstractConfiguration
      *
      * @throws InvalidConfigurationException
      */
-    public function setLineEnding($lineEnding)
+    public function setLineEnding($lineEnding): void
     {
-        if (!in_array($lineEnding, array(self::LINE_ENDING_CR, self::LINE_ENDING_CRLF, self::LINE_ENDING_LF))) {
+        if (!in_array($lineEnding, array(self::LINE_ENDING_CR, self::LINE_ENDING_CRLF, self::LINE_ENDING_LF), true)) {
             throw new InvalidConfigurationException('Invalid line ending provided. Only CR,LF and CRLF allowed');
         }
+
         $this->lineEnding = $lineEnding;
     }
 }

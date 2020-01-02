@@ -23,5 +23,5 @@ interface ParserInterface
      *
      * @return array
      */
-    public function parse($csvString);
+    public function parse($csvString): array;
 }

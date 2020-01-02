@@ -8,7 +8,7 @@ use Kuborgh\CsvBundle\Exception\EofException;
  * Full-featured rfc4180 parser, but may be slow for large files.
  * The csv is parsed bytewise with lookahead
  */
-class CharacterParser extends AbstractParser implements ParserInterface
+class CharacterParser extends AbstractParser
 {
     /**
      * Pointer to the next character being read
@@ -59,7 +59,7 @@ class CharacterParser extends AbstractParser implements ParserInterface
      *
      * @return array
      */
-    public function parse($csvString)
+    public function parse($csvString): array
     {
         $this->init($csvString);
 
@@ -88,7 +88,7 @@ class CharacterParser extends AbstractParser implements ParserInterface
                 case $lineBreak1:
                     // Do we need an extra character?
                     if ($lineBreak2) {
-                        if ($this->preview() == $lineBreak2) {
+                        if ($this->preview() === $lineBreak2) {
                             $this->read();
                             $this->finishField();
                             $this->finishRow();
@@ -119,7 +119,7 @@ class CharacterParser extends AbstractParser implements ParserInterface
      *
      * @param string $csvString
      */
-    protected function init($csvString)
+    protected function init(string $csvString): void
     {
         $this->nextChar = 0;
         $this->csvString = $csvString;
@@ -130,9 +130,10 @@ class CharacterParser extends AbstractParser implements ParserInterface
      * Read the current character and forward the pointer
      *
      * @return string one character
+     *
      * @throws EofException
      */
-    protected function read()
+    protected function read(): string
     {
         $char = $this->preview();
         $this->nextChar++;
@@ -144,16 +145,16 @@ class CharacterParser extends AbstractParser implements ParserInterface
      * Peak into the next character without forwarding the pointer
      *
      * @return string one character
+     *
      * @throws EofException
      */
-    protected function preview()
+    protected function preview(): string
     {
         if ($this->nextChar >= $this->csvLength) {
             throw new EofException('EOF reached');
         }
-        $char = $this->csvString[$this->nextChar];
 
-        return $char;
+        return $this->csvString[$this->nextChar];
     }
 
     /**
@@ -161,12 +162,13 @@ class CharacterParser extends AbstractParser implements ParserInterface
      * NOTE: The pointer is increased more than it is read (to simulate the quote has been read, too)
      *
      * @return string
+     *
      * @throws EofException
      */
-    protected function leap()
+    protected function leap(): string
     {
         $pos = strpos($this->csvString, '"', $this->nextChar);
-        if ($pos === false) {
+        if (false === $pos) {
             throw new EofException('EOF reached (in quoted string)');
         }
         $chars = substr($this->csvString, $this->nextChar, $pos - $this->nextChar);
@@ -178,7 +180,7 @@ class CharacterParser extends AbstractParser implements ParserInterface
     /**
      * Read quoted string until quote end is reached.
      */
-    protected function readQuotedString()
+    protected function readQuotedString(): void
     {
         do {
             // Leap forward to next quotation mark
@@ -186,7 +188,7 @@ class CharacterParser extends AbstractParser implements ParserInterface
 
             try {
                 // Two quotes are one quote in the string
-                if ($this->preview() == '"') {
+                if ('"' === $this->preview()) {
                     $this->field .= $this->read();
                 } else {
                     // Quote ended
@@ -203,7 +205,7 @@ class CharacterParser extends AbstractParser implements ParserInterface
      *
      * @param bool $force When force is true, even empty fields are added
      */
-    protected function finishField($force = true)
+    protected function finishField($force = true): void
     {
         if ($force || !empty($this->field)) {
             $this->row[] = $this->field;
@@ -214,7 +216,7 @@ class CharacterParser extends AbstractParser implements ParserInterface
     /**
      * Row is complete and can be added to result
      */
-    protected function finishRow()
+    protected function finishRow(): void
     {
         $this->rows[] = $this->row;
         $this->row = array();

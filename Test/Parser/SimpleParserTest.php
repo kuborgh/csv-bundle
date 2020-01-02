@@ -1,6 +1,7 @@
 <?php
 
 use Kuborgh\CsvBundle\Configuration\ParserConfiguration;
+use Kuborgh\CsvBundle\Parser\ParserInterface;
 use Kuborgh\CsvBundle\Parser\SimpleParser;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -10,7 +11,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  */
 class SimpleParserTest extends AbstractParserTest
 {
-    public function testSimpleParsing()
+    public function testSimpleParsing(): void
     {
         $csv = <<<EOT
 a,b,c\r\nd,e,f
@@ -27,7 +28,7 @@ EOT;
         $this->assertEquals('f', $array[1][2]);
     }
 
-    public function testConfiguredParsing()
+    public function testConfiguredParsing(): void
     {
         $config = array(
             'delimiter'   => ';',
@@ -53,9 +54,9 @@ EOT;
     /**
      * @param ParserConfiguration $config
      *
-     * @return SimpleParser
+     * @return ParserInterface
      */
-    protected function newParser(ParserConfiguration $config)
+    protected function newParser(ParserConfiguration $config): ParserInterface
     {
         return new SimpleParser($config);
     }

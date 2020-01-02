@@ -1,13 +1,17 @@
 <?php
 
+use Kuborgh\CsvBundle\Configuration\ParserConfiguration;
 use Kuborgh\CsvBundle\DependencyInjection\KuborghCsvExtension;
+use Kuborgh\CsvBundle\Generator\GeneratorInterface;
+use Kuborgh\CsvBundle\Generator\PhpGenerator;
+use Kuborgh\CsvBundle\Parser\ParserInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Kuborgh\CsvBundle\Parser\Parser;
 
 /**
  * Test symfony configuration
  */
-class ConfigurationTest extends PHPUnit_Framework_TestCase
+class DependencyInjectionTest extends TestCase
 {
     /**
      * @var ContainerBuilder
@@ -19,25 +23,39 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
      */
     protected $extension;
 
-    public function testDefaultParserConfiguration()
+    public function setUp(): void
+    {
+        $this->container = new ContainerBuilder();
+        $this->extension = new KuborghCsvExtension();
+    }
+
+    /**
+     * @throws ReflectionException
+     * @throws Exception
+     */
+    public function testDefaultParserConfiguration(): void
     {
         $config = array('kuborgh_csv' => array('parser' => array('test' => array())));
         $this->extension->load($config, $this->container);
 
-        /** @var \Kuborgh\CsvBundle\Parser\ParserInterface $testParser */
+        /** @var ParserInterface $testParser */
         $testParser = $this->container->get('kuborgh_csv.parser.test');
 
         $class = new ReflectionClass(get_class($testParser));
         $reflCconfig = $class->getProperty('configuration');
         $reflCconfig->setAccessible(true);
-        /** @var \Kuborgh\CsvBundle\Configuration\ParserConfiguration $config */
+        /** @var ParserConfiguration $config */
         $config = $reflCconfig->getValue($testParser);
 
         $this->assertEquals(',', $config->getDelimiter());
         $this->assertEquals("\r\n", $config->getLineEnding());
     }
 
-    public function testParserConfiguration()
+    /**
+     * @throws ReflectionException
+     * @throws Exception
+     */
+    public function testParserConfiguration(): void
     {
         $config = array(
             'kuborgh_csv' => array(
@@ -52,7 +70,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         );
         $this->extension->load($config, $this->container);
 
-        /** @var \Kuborgh\CsvBundle\Parser\ParserInterface $testParser */
+        /** @var ParserInterface $testParser */
         $testParser = $this->container->get('kuborgh_csv.parser.test');
 
         $class = new ReflectionClass(get_class($testParser));
@@ -64,25 +82,33 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("\n", $config->getLineEnding());
     }
 
-    public function testDefaultGeneratorConfiguration()
+    /**
+     * @throws ReflectionException
+     * @throws Exception
+     */
+    public function testDefaultGeneratorConfiguration(): void
     {
         $config = array('kuborgh_csv' => array('generator' => array('test' => array())));
         $this->extension->load($config, $this->container);
 
-        /** @var \Kuborgh\CsvBundle\Generator\GeneratorInterface $testGenerator */
+        /** @var GeneratorInterface $testGenerator */
         $testGenerator = $this->container->get('kuborgh_csv.generator.test');
 
         $class = new ReflectionClass(get_class($testGenerator));
         $reflCconfig = $class->getProperty('configuration');
         $reflCconfig->setAccessible(true);
-        /** @var \Kuborgh\CsvBundle\Configuration\ParserConfiguration $config */
+        /** @var ParserConfiguration $config */
         $config = $reflCconfig->getValue($testGenerator);
 
         $this->assertEquals(',', $config->getDelimiter());
         $this->assertEquals("\r\n", $config->getLineEnding());
     }
 
-    public function testGeneratorConfiguration()
+    /**
+     * @throws ReflectionException
+     * @throws Exception
+     */
+    public function testGeneratorConfiguration(): void
     {
         $config = array(
             'kuborgh_csv' => array(
@@ -97,7 +123,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         );
         $this->extension->load($config, $this->container);
 
-        /** @var \Kuborgh\CsvBundle\Generator\PhpGenerator $testGenerator */
+        /** @var PhpGenerator $testGenerator */
         $testGenerator = $this->container->get('kuborgh_csv.generator.test');
 
         $class = new ReflectionClass(get_class($testGenerator));
@@ -107,11 +133,5 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('7', $config->getDelimiter());
         $this->assertEquals("\n", $config->getLineEnding());
-    }
-
-    protected function setUp()
-    {
-        $this->container = new ContainerBuilder();
-        $this->extension = new KuborghCsvExtension();
     }
 }

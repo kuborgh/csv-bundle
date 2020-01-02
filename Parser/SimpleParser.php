@@ -5,7 +5,7 @@ namespace Kuborgh\CsvBundle\Parser;
 /**
  * Very very simple CSV Parser without escaping support
  */
-class SimpleParser extends AbstractParser implements ParserInterface
+class SimpleParser extends AbstractParser
 {
     /**
      * Parse the given string into an php array
@@ -14,7 +14,7 @@ class SimpleParser extends AbstractParser implements ParserInterface
      *
      * @return array
      */
-    public function parse($csvString)
+    public function parse($csvString): array
     {
         $lineEnding = $this->configuration->getLineEnding();
         $delimiter = $this->configuration->getDelimiter();

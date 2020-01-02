@@ -2,19 +2,20 @@
 
 use Kuborgh\CsvBundle\Configuration\ParserConfiguration;
 use Kuborgh\CsvBundle\Parser\ParserInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * Test parser
  */
-abstract class AbstractParserTest extends PHPUnit_Framework_TestCase
+abstract class AbstractParserTest extends TestCase
 {
     /**
      * @var ParserInterface
      */
     protected $parser;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setConfiguration();
     }
@@ -23,7 +24,7 @@ abstract class AbstractParserTest extends PHPUnit_Framework_TestCase
      * @param int   $num
      * @param array $array
      */
-    protected function assertNumRows($num, $array)
+    protected function assertNumRows($num, $array): void
     {
         $cnt = count($array);
         $errMsg = sprintf('Number of rows differs. Found %d but expected %d', $cnt, $num);
@@ -50,7 +51,7 @@ abstract class AbstractParserTest extends PHPUnit_Framework_TestCase
      *
      * @param array $config
      */
-    protected function setConfiguration(array $config = array())
+    protected function setConfiguration(array $config = array()): void
     {
         // apply attributes
         $configObj = new ParserConfiguration();
@@ -70,5 +71,5 @@ abstract class AbstractParserTest extends PHPUnit_Framework_TestCase
      *
      * @return ParserInterface
      */
-    abstract protected function newParser(ParserConfiguration $config);
+    abstract protected function newParser(ParserConfiguration $config): ParserInterface;
 }

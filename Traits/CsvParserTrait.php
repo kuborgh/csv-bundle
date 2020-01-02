@@ -2,7 +2,9 @@
 
 namespace Kuborgh\CsvBundle\Traits;
 
+use Exception;
 use Kuborgh\CsvBundle\Parser\ParserInterface;
+use RuntimeException;
 
 /**
  * Helper for setter-injection of a csv parser
@@ -19,7 +21,7 @@ trait CsvParserTrait
      *
      * @param ParserInterface $csvParser
      */
-    public function setCsvParser($csvParser)
+    public function setCsvParser($csvParser): void
     {
         $this->csvParser = $csvParser;
     }
@@ -28,12 +30,13 @@ trait CsvParserTrait
      * Get csvParser
      *
      * @return ParserInterface
-     * @throws \Exception
+     *
+     * @throws Exception
      */
-    protected function getCsvParser()
+    protected function getCsvParser(): ParserInterface
     {
-        if (is_null($this->csvParser)) {
-            throw new \Exception('CSV Parser not injected into '.get_class($this));
+        if (null === $this->csvParser) {
+            throw new RuntimeException('CSV Parser not injected into '.get_class($this));
         }
 
         return $this->csvParser;
@@ -42,11 +45,13 @@ trait CsvParserTrait
     /**
      * Convenience wrapper
      *
-     * @param string $csv
+     * @param $csv
      *
      * @return array
+     *
+     * @throws Exception
      */
-    protected function parseCsv($csv)
+    protected function parseCsv($csv): array
     {
         return $this->getCsvParser()->parse($csv);
     }

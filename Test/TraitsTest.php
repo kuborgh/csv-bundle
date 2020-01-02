@@ -1,25 +1,45 @@
 <?php
 
+use Kuborgh\CsvBundle\Configuration\GeneratorConfiguration;
+use Kuborgh\CsvBundle\Configuration\ParserConfiguration;
 use Kuborgh\CsvBundle\DependencyInjection\KuborghCsvExtension;
+use Kuborgh\CsvBundle\Generator\PhpGenerator;
+use Kuborgh\CsvBundle\Parser\SimpleParser;
+use Kuborgh\CsvBundle\Traits\CsvGeneratorTrait;
+use Kuborgh\CsvBundle\Traits\CsvParserTrait;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Kuborgh\CsvBundle\Parser\Parser;
 
 /**
  * Test DI traits
  */
-class TraitsTest extends PHPUnit_Framework_TestCase
+class TraitsTest extends TestCase
 {
     /**
      * @var ContainerBuilder
      */
     protected $container;
 
-    public function testCsvGeneratorTrait()
+    /**
+     * @var KuborghCsvExtension
+     */
+    private $extension;
+
+    public function setUp(): void
     {
-        $config = new \Kuborgh\CsvBundle\Configuration\GeneratorConfiguration();
-        $generator = new \Kuborgh\CsvBundle\Generator\PhpGenerator($config);
-        /** @var \Kuborgh\CsvBundle\Traits\CsvGeneratorTrait $obj */
-        $obj = $this->getObjectForTrait('Kuborgh\CsvBundle\Traits\CsvGeneratorTrait');
+        $this->container = new ContainerBuilder();
+        $this->extension = new KuborghCsvExtension();
+    }
+    /**
+     * @throws ReflectionException
+     */
+    public function testCsvGeneratorTrait(): void
+    {
+        $config = new GeneratorConfiguration();
+        $generator = new PhpGenerator($config);
+
+        /** @var CsvGeneratorTrait $obj */
+        $obj = $this->getObjectForTrait(CsvGeneratorTrait::class);
         $obj->setCsvGenerator($generator);
 
         $class = new ReflectionClass(get_class($obj));
@@ -31,11 +51,13 @@ class TraitsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Exception
+     * @throws ReflectionException
      */
-    public function testGeneratorNotInjectedException()
+    public function testGeneratorNotInjectedException(): void
     {
-        $obj = $this->getObjectForTrait('Kuborgh\CsvBundle\Traits\CsvGeneratorTrait');
+        $this->expectException(RuntimeException::class);
+
+        $obj = $this->getObjectForTrait(CsvGeneratorTrait::class);
 
         $class = new ReflectionClass(get_class($obj));
         $reflMethod = $class->getMethod('generateCsv');
@@ -43,12 +65,16 @@ class TraitsTest extends PHPUnit_Framework_TestCase
         $reflMethod->invoke($obj, array(array('a', 7)));
     }
 
-    public function testCsvParserTrait()
+    /**
+     * @throws ReflectionException
+     */
+    public function testCsvParserTrait(): void
     {
-        $config = new \Kuborgh\CsvBundle\Configuration\ParserConfiguration();
-        $parser = new \Kuborgh\CsvBundle\Parser\SimpleParser($config);
-        /** @var \Kuborgh\CsvBundle\Traits\CsvParserTrait $obj */
-        $obj = $this->getObjectForTrait('Kuborgh\CsvBundle\Traits\CsvParserTrait');
+        $config = new ParserConfiguration();
+        $parser = new SimpleParser($config);
+
+        /** @var CsvParserTrait $obj */
+        $obj = $this->getObjectForTrait(CsvParserTrait::class);
         $obj->setCsvParser($parser);
 
         $class = new ReflectionClass(get_class($obj));
@@ -60,21 +86,17 @@ class TraitsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Exception
+     * @throws ReflectionException
      */
-    public function testParserNotInjectedException()
+    public function testParserNotInjectedException(): void
     {
-        $obj = $this->getObjectForTrait('Kuborgh\CsvBundle\Traits\CsvParserTrait');
+        $this->expectException(Exception::class);
+
+        $obj = $this->getObjectForTrait(CsvParserTrait::class);
 
         $class = new ReflectionClass(get_class($obj));
         $reflMethod = $class->getMethod('parseCsv');
         $reflMethod->setAccessible(true);
         $reflMethod->invoke($obj, 'a,7');
-    }
-
-    protected function setUp()
-    {
-        $this->container = new ContainerBuilder();
-        $this->extension = new KuborghCsvExtension();
     }
 }

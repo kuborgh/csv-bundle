@@ -9,7 +9,7 @@ use Kuborgh\CsvBundle\Generator\StringGenerator;
  */
 class StringGeneratorTest extends AbstractGeneratorTest
 {
-    public function testQuotingAndTypesEscaping()
+    public function testQuotingAndTypesEscaping(): void
     {
         $array = array(
             array('Hello', '"World"', 7),
@@ -20,18 +20,18 @@ class StringGeneratorTest extends AbstractGeneratorTest
         $this->assertEquals("\"Hello\",\"\"\"World\"\"\",7\r\n,,0\r\n\"Float\"\"\",,\"\"\"\"", $csv);
     }
 
-    public function testFloatDe()
+    public function testFloatDe(): void
     {
         $array = array(
             array(1.0, 1.2, 1.23456789012345),
-            array((float)122.0, 22.22, (float)0.0),
+            array((float) 122.0, 22.22, (float) 0.0),
         );
         setlocale(LC_NUMERIC, 'de_DE');
         $csv = $this->generator->generate($array);
         $this->assertEquals("1,1.2,1.23456789012345\r\n122,22.219999999999999,0", $csv);
     }
 
-    public function testFloatEn()
+    public function testFloatEn(): void
     {
         $array = array(
             array(1.0, 1.2, 1.2345678901234),
@@ -41,33 +41,31 @@ class StringGeneratorTest extends AbstractGeneratorTest
         $this->assertEquals("1,1.2,1.2345678901234", $csv);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testInvalidType1()
+
+    public function testInvalidType1(): void
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $array = array(
             array(array(1)),
         );
         $this->generator->generate($array);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testInvalidType2()
+    public function testInvalidType2(): void
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $array = array(
             array(new \stdClass()),
         );
         $this->generator->generate($array);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testInvalidStructure()
+    public function testInvalidStructure(): void
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $array = array(1);
         $this->generator->generate($array);
     }
@@ -79,7 +77,7 @@ class StringGeneratorTest extends AbstractGeneratorTest
      *
      * @return GeneratorInterface
      */
-    protected function newGenerator(GeneratorConfiguration $config)
+    protected function newGenerator(GeneratorConfiguration $config): GeneratorInterface
     {
         return new StringGenerator($config);
     }

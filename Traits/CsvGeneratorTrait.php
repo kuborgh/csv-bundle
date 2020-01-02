@@ -3,6 +3,7 @@
 namespace Kuborgh\CsvBundle\Traits;
 
 use Kuborgh\CsvBundle\Generator\GeneratorInterface;
+use RuntimeException;
 
 /**
  * Helper for setter-injection of a csv generator
@@ -19,7 +20,7 @@ trait CsvGeneratorTrait
      *
      * @param GeneratorInterface $csvGenerator
      */
-    public function setCsvGenerator($csvGenerator)
+    public function setCsvGenerator($csvGenerator): void
     {
         $this->csvGenerator = $csvGenerator;
     }
@@ -28,12 +29,13 @@ trait CsvGeneratorTrait
      * Get csv generator
      *
      * @return GeneratorInterface
-     * @throws \Exception
+     *
+     * @throws RuntimeException
      */
-    protected function getCsvGenerator()
+    protected function getCsvGenerator(): GeneratorInterface
     {
-        if (is_null($this->csvGenerator)) {
-            throw new \Exception('CSV Generator not injected into '.get_class($this));
+        if (null === $this->csvGenerator) {
+            throw new RuntimeException('CSV Generator not injected into '.get_class($this));
         }
 
         return $this->csvGenerator;
@@ -42,11 +44,13 @@ trait CsvGeneratorTrait
     /**
      * Convenience wrapper
      *
-     * @param array[] $array
+     * @param array $array
      *
      * @return string
+     *
+     * @throws RuntimeException
      */
-    protected function generateCsv($array)
+    protected function generateCsv(array $array): string
     {
         return $this->getCsvGenerator()->generate($array);
     }

@@ -2,19 +2,20 @@
 
 use Kuborgh\CsvBundle\Configuration\GeneratorConfiguration;
 use Kuborgh\CsvBundle\Generator\GeneratorInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * Test generator
  */
-abstract class AbstractGeneratorTest extends PHPUnit_Framework_TestCase
+abstract class AbstractGeneratorTest extends TestCase
 {
     /**
      * @var GeneratorInterface
      */
     protected $generator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setConfiguration();
     }
@@ -24,7 +25,7 @@ abstract class AbstractGeneratorTest extends PHPUnit_Framework_TestCase
      *
      * @param array $config
      */
-    protected function setConfiguration(array $config = array())
+    protected function setConfiguration(array $config = array()): void
     {
         // apply attributes
         $configObj = new GeneratorConfiguration();
@@ -44,5 +45,5 @@ abstract class AbstractGeneratorTest extends PHPUnit_Framework_TestCase
      *
      * @return GeneratorInterface
      */
-    abstract protected function newGenerator(GeneratorConfiguration $config);
+    abstract protected function newGenerator(GeneratorConfiguration $config): GeneratorInterface;
 }
