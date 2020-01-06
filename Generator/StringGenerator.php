@@ -5,7 +5,7 @@ namespace Kuborgh\CsvBundle\Generator;
 /**
  * Generates rfc4180 conform csv by concatenating strings
  */
-class StringGenerator extends AbstractGenerator implements GeneratorInterface
+class StringGenerator extends AbstractGenerator
 {
     /**
      * Generate csv string from array
@@ -14,7 +14,7 @@ class StringGenerator extends AbstractGenerator implements GeneratorInterface
      *
      * @return string CSV
      */
-    public function generate(array $array)
+    public function generate(array $array): string
     {
         $delim = $this->configuration->getDelimiter();
         $lineEnd = $this->configuration->getLineEnding();
@@ -52,8 +52,7 @@ class StringGenerator extends AbstractGenerator implements GeneratorInterface
             }
             $lines[] = implode($delim, $newRow);
         }
-        $string = implode($lineEnd, $lines);
 
-        return $string;
+        return implode($lineEnd, $lines);
     }
 }

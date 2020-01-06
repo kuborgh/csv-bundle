@@ -1,20 +1,21 @@
 <?php
 
 use Kuborgh\CsvBundle\Configuration\ParserConfiguration;
+use Kuborgh\CsvBundle\Exception\EofException;
 use Kuborgh\CsvBundle\Parser\CharacterParser;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\PropertyAccess\PropertyAccess;
+use Kuborgh\CsvBundle\Parser\ParserInterface;
 
 /**
  * Test parser
  */
 class CharacterParserTest extends AbstractParserTest
 {
-    public function testSimpleParsing()
+    public function testSimpleParsing(): void
     {
         $csv = <<<EOT
 a,b,c\r\nd,e,f
 EOT;
+
         $array = $this->parser->parse($csv);
 
         $this->assertNumRows(2, $array);
@@ -27,7 +28,7 @@ EOT;
         $this->assertEquals('f', $array[1][2]);
     }
 
-    public function testConfiguredParsing()
+    public function testConfiguredParsing(): void
     {
         $config = array(
             'delimiter'   => ';',
@@ -38,6 +39,7 @@ EOT;
 a;b;c
 d;e;f
 EOT;
+
         $array = $this->parser->parse($csv);
 
         $this->assertNumRows(2, $array);
@@ -50,7 +52,7 @@ EOT;
         $this->assertEquals('f', $array[1][2]);
     }
 
-    public function testEscaping()
+    public function testEscaping(): void
     {
         $config = array(
             'delimiter'   => ';',
@@ -77,7 +79,7 @@ EOT;
         $this->assertEquals('When not starting with a quote, it may end with one "', $array[1][4]);
     }
 
-    public function testQuotes()
+    public function testQuotes(): void
     {
         $config = array(
             'delimiter'   => ';',
@@ -101,7 +103,7 @@ EOT;
         $this->assertEquals('""', $array[1][2]);
     }
 
-    public function testInvalidLineBreak()
+    public function testInvalidLineBreak(): void
     {
         $config = array(
             'delimiter'   => ';',
@@ -119,11 +121,10 @@ EOT;
         $this->assertEquals("e\n", $array[0][3]);
     }
 
-    /**
-     * @expectedException \Kuborgh\CsvBundle\Exception\EofException
-     */
-    public function testEofInQuote()
+    public function testEofInQuote(): void
     {
+        $this->expectException(EofException::class);
+
         $csv = '"a","b""';
         $this->parser->parse($csv);
     }
@@ -133,9 +134,9 @@ EOT;
      *
      * @param ParserConfiguration $config
      *
-     * @return \Kuborgh\CsvBundle\Parser\ParserInterface
+     * @return ParserInterface
      */
-    protected function newParser(ParserConfiguration $config)
+    protected function newParser(ParserConfiguration $config): ParserInterface
     {
         return new CharacterParser($config);
     }

@@ -23,5 +23,5 @@ interface GeneratorInterface
      *
      * @return string CSV
      */
-    public function generate(array $array);
+    public function generate(array $array): string;
 }

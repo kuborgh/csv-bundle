@@ -9,7 +9,7 @@ use Kuborgh\CsvBundle\Generator\PhpGenerator;
  */
 class PhpGeneratorTest extends AbstractGeneratorTest
 {
-    public function testSimpleCsv()
+    public function testSimpleCsv(): void
     {
         $array = array(
             array('a', 'b', 1),
@@ -19,7 +19,7 @@ class PhpGeneratorTest extends AbstractGeneratorTest
         $this->assertEquals("a,b,1\nc,hallo,welt\n", $csv);
     }
 
-    public function testOtherDelimiter()
+    public function testOtherDelimiter(): void
     {
         $this->setConfiguration(array('delimiter' => ';'));
         $array = array(
@@ -30,11 +30,10 @@ class PhpGeneratorTest extends AbstractGeneratorTest
         $this->assertEquals("a;b;1\nc;hallo;welt\n", $csv);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testInvalidData()
+    public function testInvalidData(): array
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $array = array(7);
         $this->generator->generate($array);
     }
@@ -46,7 +45,7 @@ class PhpGeneratorTest extends AbstractGeneratorTest
      *
      * @return GeneratorInterface
      */
-    protected function newGenerator(GeneratorConfiguration $config)
+    protected function newGenerator(GeneratorConfiguration $config): GeneratorInterface
     {
         return new PhpGenerator($config);
     }

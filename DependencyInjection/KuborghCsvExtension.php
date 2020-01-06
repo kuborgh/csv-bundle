@@ -8,6 +8,7 @@
 
 namespace Kuborgh\CsvBundle\DependencyInjection;
 
+use Exception;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -23,6 +24,8 @@ class KuborghCsvExtension extends Extension
 {
     /**
      * {@inheritDoc}
+     *
+     * @throws Exception
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -43,7 +46,7 @@ class KuborghCsvExtension extends Extension
      * @param array            $config    Config
      * @param ContainerBuilder $container Container
      */
-    protected function loadParserConfig(array $config, ContainerBuilder $container)
+    protected function loadParserConfig(array $config, ContainerBuilder $container): void
     {
         foreach ($config as $parserName => $parserConfig) {
             $parserConfigClass = $container->getParameter('kuborgh_csv.configuration.parser.class');
@@ -66,7 +69,7 @@ class KuborghCsvExtension extends Extension
      * @param array            $config    Config
      * @param ContainerBuilder $container Container
      */
-    protected function loadGeneratorConfig(array $config, ContainerBuilder $container)
+    protected function loadGeneratorConfig(array $config, ContainerBuilder $container): void
     {
         foreach ($config as $parserName => $parserConfig) {
             // Prepare config object with common settings
@@ -92,7 +95,7 @@ class KuborghCsvExtension extends Extension
      *
      * @return Definition
      */
-    protected function loadCommonConfig($parserConfig, $parserConfigClass)
+    protected function loadCommonConfig($parserConfig, $parserConfigClass): Definition
     {
         $parserConfigDef = new Definition($parserConfigClass);
 

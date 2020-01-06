@@ -19,10 +19,16 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritDoc}
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('kuborgh_csv');
+        $treeBuilder = new TreeBuilder('kuborgh_csv');
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            /** @psalm-suppress UndefinedMethod */
+            /** @psalm-suppress DeprecatedMethod */
+            $rootNode = $treeBuilder->root('kuborgh_csv');
+        }
 
         $rootNode
             ->children()

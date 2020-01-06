@@ -7,8 +7,8 @@ use Kuborgh\CsvBundle\Configuration\ParserConfiguration;
  */
 class ParserConfigurationTest extends AbstractConfigurationTest
 {
-    protected function setUp()
+    public function setUp(): void
     {
-        $this->configration = new ParserConfiguration();
+        $this->configuration = new ParserConfiguration();
     }
 }
